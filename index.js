@@ -65,8 +65,10 @@ const setiker = JSON.parse(fs.readFileSync('./temp/stik.json'))
 const audionye = JSON.parse(fs.readFileSync('./temp/vn.json'))
 const imagenye = JSON.parse(fs.readFileSync('./temp/image.json'))
 const videonye = JSON.parse(fs.readFileSync('./temp/video.json'))
+const { stick } = require('./src/respon');
 
 //*********** CUSTOMABLE ***********//
+
 prefix = settings.prefix
 f = '_'
 antidel = true
@@ -79,6 +81,7 @@ leave = '\`\`\`Sayonaraa👋\`\`\`'
 promote = '*Your Welcome🥳*'
 demote = '*Yahahahwahyuuu kasihaan di demote🤣*'
 public = true
+
 
 const getCmd = (id) => {
     let position = null
@@ -442,6 +445,7 @@ FxBot.on('chat-update', async (mek) => {
 			const isOwner = ownerNumber.includes(sender)
 			const q = args.join(' ')
 			const isUrl = (url) => {
+				
 			    return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi'))
 			}
 			const reply = (teks) => {
@@ -501,7 +505,7 @@ key: {
 					"title": fake,
 					"description": "SELF BOT",
 					"currencyCode": "USD",
-					"priceAmount1000": "2000",
+					"priceAmount1000": "99999999999999",
 					"retailerId": "Self Bot",
 					"productImageCount": 1
 				},
@@ -860,8 +864,20 @@ teks = `───── ● BOT INFO ● ─────
 │
 ├───── ● GRUPO ● ─────
 │◈ 🪀 *linkgrupo *
-│◈ 🪀 *public* 
-│◈ 🪀 *term*
+├◇ Obtén el enlace del grupo
+├───── ● DESCARGAS ● ─────
+│◈ 🌹 *play *
+├◇ Descarga una audio de YouTube.
+│◈ 🌹 *ytmp3 *
+├◇ Descarga un audio de YouTube.
+│◈ 🌹 *ytmp4 *
+├◇Descarga una video de YouTube.
+│◈ 🌹 *nhentai *
+├◇ Descarga hentai en forma de PDF.
+│◈ 🌹 *gitclone *
+├◇ Descarga un git de GitHub.
+│◈ 🌹 *githubstalk*
+├◇ Obtén información de un usua.rio de GitHub.
 └──────────────────`
      FxBot.sendMessage(from, teks, MessageType.text, {sendEphemeral: true, quoted: ftroli, contextInfo: { forwardingScore: 9999, isForwarded: true, externalAdReply : { title : `私は道です`, body : "FX - BOT ⁴̅⁰͍⁴̵", mediaType: 2, thumbnail: fs.readFileSync('./media/FxBot.jpeg'), mediaUrl : `https://youtu.be/Np08yVjpnWU`}}})
 
@@ -1091,7 +1107,53 @@ FxBot.relayWAMessage(reshb)
 FxBot.sendMessage(from, { text: "Git Ofc del Creador:\nhttps://github.com/FxBot", matchedText: 'https://github.com/FxBot/NyanBot', description: "", title: "Click Aqui !!!", jpegThumbnail: fs.readFileSync('./media/reply.png') }, 'extendedTextMessage', { detectLinks: false, contextInfo: { forwardingScore: 508, isForwarded: true}, quoted: mek})
 break
 		
+		
+
+case 'nhentai':
+try {
+if (args.length === 0) return reply(`⬡ Descargar Hentai En Formato PDF\n\n¿Como usar?\n\nEjemplo : ${prefix}nhentai ID\n\nEjemplo : ${prefix}nhentai 2033`)
+id =args.join(" ")
+let url = `http://hadi-api.herokuapp.com/api/nhentai?id=${id}`
+reply(mess.wait)         
+buffer = await getBuffer(`${url}`)
+FxBot.sendMessage(from, buffer, document, {quoted: mek, mimetype : 'application/pdf', filename: `ID Del Hentai PDF : ${id}`})
+} catch {
+reply(`*▢ No se encontró ningún resultado.`)
+}
+break                    
+		case 'githubstalk':
+		try {
+			if (args.length === 0) return reply(`⬡ Búsqueda de GitHub\n\n¿Como usar?\n\nEjemplo : ${prefix}githubstalk Nombre del usuario\n\nEjemplo : ${prefix}githubstalk Fxmods`)
+		sh = args.join(" ")
+		 anu = await fetchJson(`http://hadi-api.herokuapp.com/api/githubstalk?username=${sh}`)
+
+gt = anu.result
+                if (anu.error) return reply(anu.error)
+                github = `                「 *GITHUB*  」
+              
+▢ Bio : ${gt.bio}
+▢ Compañía : ${gt.company}
+▢ Correo : ${gt.email}
+▢ Twitter : ${gt.twiter_username}
+▢ Repositorios : ${gt.public_repo}     
+▢ Siguiendo : ${gt.following}
+▢ Seguidores : ${gt.follower} 
+▢ Ubicación : ${gt.location} 
+▢ Tipo : ${gt.Type} 
+
+▢ Información sobre el usuario ${gt.company}.`
+buffer = await getBuffer(gt.avatar)
+FxBot.sendMessage(from, buffer, image, {quoted: ftoko, caption: github})
+} catch {
+reply(`▢ Lo siento, no se encontró ningún usuario relacionado con ${sh}.`)
+}
+break
+		
+		
+		
+		
 case 'play':
+try {
 if (args.length === 0) return reply(`⬡ Descargar Música\n\n¿Como usar?\n\nEjemplo : ${prefix}play Control NCS`)
 yts = args.join(" ")
 async function sendFileFromDts(from, url, caption, mek, men) {
@@ -1122,9 +1184,13 @@ reply(mess.wait)
                 buffer = await getBuffer(abuela.thumb)
                 FxBot.sendMessage(from, buffer, image, {quoted: ftroli, caption: infomp3})
         sendFileFromDts(from, abuela.download_audio, mek)
+        } catch {
+reply(`▢ Lo siento, no se encontró ningun audio relacionado con ${yts}.`)
+}
         break
 
 case 'ytmp3':
+try {
 if (args.length === 0) return reply(`⬡ Descargar Música\n\n¿Como usar?\n\nEjemplo : ${prefix}ytmp3 Control NCS`)
 yts = args.join(" ")
 async function sendFileFromDts3(from, url, caption, mek, men) {
@@ -1156,10 +1222,14 @@ reply(mess.wait)
                 buffer = await getBuffer(abuela.thumb)
                 FxBot.sendMessage(from, buffer, image, {quoted: ftroli, caption: infomp3})
         sendFileFromDts3(from, abuela.download_audio, mek)
+        } catch {
+reply(`▢ Lo siento, no se encontró ningun audio relacionado con ${yts}.`)
+}
         break
 
 
 case 'ytmp4':
+try {
 if (args.length === 0) return reply(`⬡ Descargar Videos\n\n¿Como usar?\n\nEjemplo : ${prefix}ytmp4 Control NCS`)
 yts = args.join(" ")
 async function sendFileFromDts1(from, url, caption, mek, men) {
@@ -1191,8 +1261,10 @@ reply(mess.wait)
                 buffer = await getBuffer(abuela.thumb)
                 FxBot.sendMessage(from, buffer, image, {quoted: ftroli, caption: infomp3})
         sendFileFromDts1(from, abuela.download_video, {quoted: mek, caption: 'FX'})
+        } catch {
+reply(`▢ Lo siento, no se encontró ningun video relacionado con ${yts}.`)
+}
 break
-
 
 
 case 'gitclone':
@@ -1223,7 +1295,17 @@ reply(`*▢ Ningún Repositorio Encontrado*
 2. ${prefix + command} Fxmods/FX-SELF-BOT-v83.2`)
 }
 break                          
-
+case 'enviarimg':
+                          if (!mek.key.fromMe) return reply('▢ Lo siento, solamente yo puedo usar ese comando.')
+                          try {
+            	if (args.length === 0) return reply(`⬡ Enviar Archivos Del Bot\n¿Como usar?\n\nEjemplo : ${prefix}enviardoc Ruta del archivo\n\nEjemplo : ${prefix}enviardoc lib/exif.js`)
+            	name = args.join(" ")
+                buffer = fs.readFileSync(`./${name}`)
+                FxBot.sendMessage(from, buffer, document, {quoted: mek, mimetype : 'image/png', filename: `${name}`})
+                } catch {
+            	reply(`*▢ No se encontró ${name}\n\n▢ Comprueba si el nombre del archivo es correcto, o su ruta es la correcta.*`)
+                }
+                break
                           case 'enviardoc':
                           if (!mek.key.fromMe) return reply('▢ Lo siento, solamente yo puedo usar ese comando.')
                           try {
@@ -1279,6 +1361,71 @@ break
 							})
         break
         
+        case 'stiker': 
+case 's': 
+case 'stikergif':
+case 'sticker': 
+case 'stickergif': 
+case 'sgif': 
+					if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
+						const encmedia = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+						const media = await FxBot.downloadAndSaveMediaMessage(encmedia)
+						ran = getRandom('.webp')
+						await ffmpeg(`./${media}`)
+							.input(media)
+							.on('start', function (cmd) {
+								console.log(`Started : ${cmd}`)
+							})
+							.on('error', function (err) {
+								console.log(`Error : ${err}`)
+								fs.unlinkSync(media)
+								reply(stick)
+							})
+							.on('end', function () {
+								console.log('Finish')
+								exec(`webpmux -set exif ${addMetadata('Fx-Bot', 'Fx-Bot Team')} ${ran} -o ${ran}`, async (error) => {
+									if (error) return reply(stick())
+									FxBot.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
+									fs.unlinkSync(media)	
+									fs.unlinkSync(ran)	
+								})
+							})
+							.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
+							.toFormat('webp')
+							.save(ran)
+					} else if ((isMedia && mek.message.videoMessage.seconds < 11 || isQuotedVideo && mek.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 11) && args.length == 0) {
+						const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+						const media = await FxBot.downloadAndSaveMediaMessage(encmedia)
+						ran = getRandom('.webp')
+						reply(wait())
+						await ffmpeg(`./${media}`)
+							.inputFormat(media.split('.')[1])
+							.on('start', function (cmd) {
+								console.log(`Started : ${cmd}`)
+							})
+							.on('error', function (err) {
+								console.log(`Error : ${err}`)
+								fs.unlinkSync(media)
+								tipe = media.endsWith('.mp4') ? 'video' : 'gif'
+								reply(`❎ Falló, en el momento de la conversión ${tipe} a la pegatina`)
+							})
+							.on('end', function () {
+								console.log('Finish')
+								exec(`webpmux -set exif ${addMetadata('Fx-Bot', 'Fx-Bot Team')} ${ran} -o ${ran}`, async (error) => {
+									if (error) return reply(stick())
+									FxBot.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
+									fs.unlinkSync(media)
+									fs.unlinkSync(ran)
+								})
+							})
+							.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
+							.toFormat('webp')
+							.save(ran)
+					} else {
+						reply(`✳️ Envia una imagen con *${prefix + command}* o etiqueta una imagen que se haya enviado\n*Videos 1-9 segundos*`)
+					}
+					break
+
         case 'hidetag':
 					if (!isGroup) return reply(mess.only.group)
 					var value = body.slice(9)
