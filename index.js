@@ -33,6 +33,7 @@ const ffmpeg = require('fluent-ffmpeg')
 const imageToBase64 = require('image-to-base64')
 const lolis = require('lolis.life')
 const SH = require('shthear')
+
 const loli = new lolis()
 const Exif = require('./lib/exif');
 const exif = new Exif();
@@ -81,6 +82,7 @@ leave = '\`\`\`Sayonaraa👋\`\`\`'
 promote = '*Your Welcome🥳*'
 demote = '*Yahahahwahyuuu kasihaan di demote🤣*'
 public = true
+
 
 
 const getCmd = (id) => {
@@ -154,6 +156,7 @@ return '```' + string + '```'
 
 async function starts() {
 	const FxBot = new WAConnection()
+	FxBot.version = [2, 2140, 12]
 	FxBot.logger.level = 'warn'
 	console.log(banner.string)
 	
@@ -482,11 +485,14 @@ contextInfo: {
 mentionedJid: [sender]}
 
 const ftroli = {
-                  key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "529984646983@s.whatsapp.net" } : {})},message: {orderMessage: {itemCount : 2021,status: 1,surface : 1,message: `${fake}`,orderTitle: 'FXTeam',thumbnail: fs.readFileSync('./media/FxBot.jpeg'), sellerJid: '0@s.whatsapp.net'}}}
+                  key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "529984646983@s.whatsapp.net" } : {})},message: {orderMessage: {itemCount : 999999999999,status: 1,surface : 1,message: `${fake}`,orderTitle: 'FXTeam',thumbnail: fs.readFileSync('./media/FxBot.jpeg'), sellerJid: '0@s.whatsapp.net'}}}
 
 const fdocu = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "documentMessage": { "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc", "mimetype": "image/jpeg", "title": fake, "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=", "fileLength": "28777", "height": 1080, "width": 1079, "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=", "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=", "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69", "mediaKeyTimestamp": "1610993486", "jpegThumbnail": fs.readFileSync('media/FxBot.jpeg')}}}
             
-
+const sticWait = (hehe) => {
+			ano = fs.readFileSync('./sticker/wait.webp')
+			FxBot.sendMessage(hehe, ano, sticker, { quoted: ftoko})
+		}
 
 const freply = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc", "mimetype": "image/jpeg", "caption": fake, "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=", "fileLength": "28777", "height": 1080, "width": 1079, "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=", "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=", "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69", "mediaKeyTimestamp": "1610993486", "jpegThumbnail": fs.readFileSync(`media/FxBot.jpeg`)} } }
 
@@ -505,7 +511,7 @@ key: {
 					"title": fake,
 					"description": "SELF BOT",
 					"currencyCode": "USD",
-					"priceAmount1000": "99999999999999",
+					"priceAmount1000": "999999999999",
 					"retailerId": "Self Bot",
 					"productImageCount": 1
 				},
@@ -739,7 +745,7 @@ FxBot.updatePresence(from, Presence.recording)
                 const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : mek
                 const media = await FxBot.downloadAndSaveMediaMessage(encmedia)
             ran = '999.webp'
-            reply(mess.wait)
+            sticWait(from)
             await ffmpeg(`./${media}`)
             .inputFormat(media.split('.')[1])
             .on('start', function (cmd) {
@@ -877,7 +883,7 @@ teks = `───── ● BOT INFO ● ─────
 │◈ 🌹 *gitclone *
 ├◇ Descarga un git de GitHub.
 │◈ 🌹 *githubstalk*
-├◇ Obtén información de un usua.rio de GitHub.
+├◇ Obtén información de un usuario de GitHub.
 └──────────────────`
      FxBot.sendMessage(from, teks, MessageType.text, {sendEphemeral: true, quoted: ftroli, contextInfo: { forwardingScore: 9999, isForwarded: true, externalAdReply : { title : `私は道です`, body : "FX - BOT ⁴̅⁰͍⁴̵", mediaType: 2, thumbnail: fs.readFileSync('./media/FxBot.jpeg'), mediaUrl : `https://youtu.be/Np08yVjpnWU`}}})
 
@@ -1114,7 +1120,7 @@ try {
 if (args.length === 0) return reply(`⬡ Descargar Hentai En Formato PDF\n\n¿Como usar?\n\nEjemplo : ${prefix}nhentai ID\n\nEjemplo : ${prefix}nhentai 2033`)
 id =args.join(" ")
 let url = `http://hadi-api.herokuapp.com/api/nhentai?id=${id}`
-reply(mess.wait)         
+sticWait(from)         
 buffer = await getBuffer(`${url}`)
 FxBot.sendMessage(from, buffer, document, {quoted: mek, mimetype : 'application/pdf', filename: `ID Del Hentai PDF : ${id}`})
 } catch {
@@ -1156,6 +1162,7 @@ case 'play':
 try {
 if (args.length === 0) return reply(`⬡ Descargar Música\n\n¿Como usar?\n\nEjemplo : ${prefix}play Control NCS`)
 yts = args.join(" ")
+sticWait(from)
 async function sendFileFromDts(from, url, caption, mek, men) {
             let mime = '';
             let res = await axios.head(url)
@@ -1171,7 +1178,8 @@ async function sendFileFromDts(from, url, caption, mek, men) {
             return FxBot.sendMessage(from, await getBuffer(url), type, {caption: caption, ptt: false, sendEphemeral: true, quoted: mek, mimetype: mime, contextInfo: { forwardingScore: 9999, isForwarded: true, "mentionedJid": men ? men : []}})
             }
 anu = await fetchJson(`http://hadi-api.herokuapp.com/api/ytplay?q=${yts}`)
-reply(mess.wait)         
+console.log(color(time, 'yellow'), color('▢ Iniciando Servidor 1...'))
+ 
                 abuela = anu.result
                 if (anu.error) return reply(anu.error)
                 infomp3 = `                「 *MÚSICA*  」
@@ -1185,6 +1193,7 @@ reply(mess.wait)
                 FxBot.sendMessage(from, buffer, image, {quoted: ftroli, caption: infomp3})
         sendFileFromDts(from, abuela.download_audio, mek)
         } catch {
+        	console.log('Ocurrio un error con el servidor, o no se encontró ningun resultado.')
 reply(`▢ Lo siento, no se encontró ningun audio relacionado con ${yts}.`)
 }
         break
@@ -1208,7 +1217,7 @@ async function sendFileFromDts3(from, url, caption, mek, men) {
             return FxBot.sendMessage(from, await getBuffer(url), type, {caption: caption, ptt: false, sendEphemeral: true, quoted: mek, mimetype: mime, contextInfo: { forwardingScore: 9999, isForwarded: true, "mentionedJid": men ? men : []}})
             }
 anu = await fetchJson(`http://hadi-api.herokuapp.com/api/yt2/audio?url=${yts}`)
-reply(mess.wait)         
+sticWait(from)         
                 abuela = anu.result
                 if (anu.error) return reply(anu.error)
                 infomp3 = `                「 *MÚSICA*  」
@@ -1247,7 +1256,7 @@ async function sendFileFromDts1(from, url, caption, mek, men) {
             return FxBot.sendMessage(from, await getBuffer(url), type, {caption: `▢ Descarga de video de YouTube hecha por FX - BOT ⁴̅⁰͍⁴̵`, ptt: false, sendEphemeral: true, quoted: mek, mimetype: mime, contextInfo: { forwardingScore: 9999, isForwarded: true, "mentionedJid": men ? men : []}})
             }
 anu = await fetchJson(`http://hadi-api.herokuapp.com/api/yt2/video?url=${yts}`)
-reply(mess.wait)         
+sticWait(from)         
                 abuela = anu.result
                 if (anu.error) return reply(anu.error)
                 infomp3 = `                「 *VIDEO*  」
@@ -1275,7 +1284,7 @@ repo =args.join(" ")
 if (!q.includes('/')) return reply('▢ ¡Formato incorrecto!')
 let url = `https://api.github.com/repos/${repo}/zipball`
 let filename = (await fetch(url, {method: 'HEAD'})).headers.get('content-disposition').match(/attachment; filename=(.*)/)[1]
-reply(mess.wait)         
+sticWait(from)         
  
 buffer = await getBuffer(`${url}`)
 
@@ -1294,7 +1303,45 @@ reply(`*▢ Ningún Repositorio Encontrado*
 1. ${prefix + command} <Nombre De Usuario>/<Repositorio>
 2. ${prefix + command} Fxmods/FX-SELF-BOT-v83.2`)
 }
-break                          
+break      
+
+
+
+
+
+
+case 'mediafire':
+if (args.length < 1) return reply('¿Y el enlace?')
+if(!isUrl(args[0]) && !args[0].includes('mediafire')) return reply(mess.error.api)
+if (Number(filesize) >= 30000) return reply(`*「 MEDIAFIRE DOWNLOAD 」*
+
+*🔖 Nombre :* ${res[0].nama}
+*🔖 Tamaño :* ${res[0].size}
+*🔖 Enlace :* ${res[0].link}
+
+_Lo sentimos, el tamaño supera el límite máximo, haga clic en el enlace de arriba_`)
+sticWait(from)
+teks = args.join(' ')
+res = await mediafireDl(teks)
+result = `*「 MEDIAFIRE DOWNLOAD 」*
+
+*¡Datos obtenidos con éxito!*
+\`\`\`🔖 Nlmbre : ${res[0].nama}\`\`\`
+\`\`\`🔖 Tamaño : ${res[0].size}\`\`\`
+\`\`\`🔖 Enlace : ${res[0].link}\`\`\`
+
+_El archivo se está enviando, espere unos minutos..._`
+reply(result)
+sendFileFromUrl(res[0].link, document, {mimetype: res[0].mime, filename: res[0].nama, quoted: mek})
+break
+
+
+
+
+
+
+
+                    
 case 'enviarimg':
                           if (!mek.key.fromMe) return reply('▢ Lo siento, solamente yo puedo usar ese comando.')
                           try {
@@ -1361,12 +1408,10 @@ case 'enviarimg':
 							})
         break
         
-        case 'stiker': 
-case 's': 
-case 'stikergif':
-case 'sticker': 
-case 'stickergif': 
-case 'sgif': 
+        
+case 'stiker': case 's': case 'stikergif':
+case 'sticker': case 'stickergif': case 'sgif':
+   
 					if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
 						const encmedia = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
 						const media = await FxBot.downloadAndSaveMediaMessage(encmedia)
@@ -1383,7 +1428,7 @@ case 'sgif':
 							})
 							.on('end', function () {
 								console.log('Finish')
-								exec(`webpmux -set exif ${addMetadata('Fx-Bot', 'Fx-Bot Team')} ${ran} -o ${ran}`, async (error) => {
+								exec(`webpmux -set exif ${addMetadata('FxBot')} ${ran} -o ${ran}`, async (error) => {
 									if (error) return reply(stick())
 									FxBot.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
 									fs.unlinkSync(media)	
@@ -1407,11 +1452,11 @@ case 'sgif':
 								console.log(`Error : ${err}`)
 								fs.unlinkSync(media)
 								tipe = media.endsWith('.mp4') ? 'video' : 'gif'
-								reply(`❎ Falló, en el momento de la conversión ${tipe} a la pegatina`)
+								reply(`Gagal, pada saat mengkonversi ${tipe} ke stiker`)
 							})
 							.on('end', function () {
 								console.log('Finish')
-								exec(`webpmux -set exif ${addMetadata('Fx-Bot', 'Fx-Bot Team')} ${ran} -o ${ran}`, async (error) => {
+								exec(`webpmux -set exif ${addMetadata('FxBot')} ${ran} -o ${ran}`, async (error) => {
 									if (error) return reply(stick())
 									FxBot.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
 									fs.unlinkSync(media)
@@ -1422,9 +1467,27 @@ case 'sgif':
 							.toFormat('webp')
 							.save(ran)
 					} else {
-						reply(`✳️ Envia una imagen con *${prefix + command}* o etiqueta una imagen que se haya enviado\n*Videos 1-9 segundos*`)
+						reply(`Kirim gambar dengan caption ${prefix}sticker atau tag gambar yang sudah dikirim`)
 					}
 					break
+
+
+
+case 'sinfondo':
+if ((isMedia || isQuotedImage)) {
+const encmedianb = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+const median = await FxBot.downloadAndSaveMediaMessage(encmedianb)
+sticWait(from)
+keyrmbg = 'bcAvZyjYAjKkp1cmK8ZgQvWH'
+ranp = getRandom('.png')
+await removeBackgroundFromImageFile({path: median, apiKey: keyrmbg, size: 'auto', type: 'auto', ranp}).then(res => {
+fs.unlinkSync(median)
+let buffer = Buffer.from(res.base64img, 'base64')
+FxBot.sendMessage(from, buffer, image, {quoted: txt1, caption: 'Fx Lol'})
+fs.unlinkSync(buffer)
+})
+}
+break
 
         case 'hidetag':
 					if (!isGroup) return reply(mess.only.group)
@@ -1566,6 +1629,43 @@ let fx1 = FxBot.prepareMessageFromContent(from,{
 		)
 		FxBot.relayWAMessage(fx1, {waitForAck: true})
                 break
+
+
+
+case 'testtt':
+ res = await FxBot.prepareMessageFromContent(from,{
+"templateMessage": {
+						"hydratedTemplate": {
+							"hydratedContentText": `Hola usuario. `,
+							"hydratedFooterText": `FX - BOT ⁴̅⁰͍⁴̵`,
+							"hydratedButtons": [
+								{
+									"quickReplyButton": {
+										"displayText": "Menu",
+										"id": "60dd75b0081979507a679f99"
+									},
+									"index": 0
+								},
+								{
+									"quickReplyButton": {
+										"displayText": "YouTube",
+										"id": "60dd75b0081979507a679f99"
+									},
+									"index": 1
+								},
+								{
+									"quickReplyButton": {
+										"displayText": "WhatsApp",
+										"id": "60dd75b0081979507a679f99"
+									},
+									"index": 2
+								}
+							]
+						}
+					}
+				}, {}) 
+FxBot.relayWAMessage(res)
+break
 					case 'chatlist':
 				case 'cekchat':
 					FxBot.updatePresence(from, Presence.composing)
