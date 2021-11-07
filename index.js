@@ -491,7 +491,12 @@ const fdocu = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from 
             
 const sticWait = (hehe) => {
 			ano = fs.readFileSync('./sticker/wait.webp')
-			FxBot.sendMessage(hehe, ano, sticker, { quoted: ftoko})
+			FxBot.sendMessage(hehe, ano, sticker, { quoted: mek})
+		}
+		
+		const sticNoAdm = (hh) => {
+			ano = fs.readFileSync('./sticker/noadm.webp')
+			FxBot.sendMessage(hh, ano, sticker, { quoted: mek})
 		}
 
 const freply = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc", "mimetype": "image/jpeg", "caption": fake, "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=", "fileLength": "28777", "height": 1080, "width": 1079, "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=", "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=", "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69", "mediaKeyTimestamp": "1610993486", "jpegThumbnail": fs.readFileSync(`media/FxBot.jpeg`)} } }
@@ -895,7 +900,7 @@ case 'antilink':
 case 'antienlace':
 if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 if (!isGroup) return reply(mess.only.group)
-if (!isGroupAdmins) return reply(mess.only.admin)
+if (!isGroupAdmins) return sticNoAdm(from)
 if (args.length < 1) return reply(`≡ _¿Cómo activar el Anti-Enlace?_\n\n┌─⊷ *ANTI-ENLACE* ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antilink 1`)
 if (args[0] === '1') {                             
 						if (isAntiLink) return reply('Ya estaba activo 🙄')  
@@ -915,7 +920,7 @@ if (args[0] === '1') {
 case 'antibottiburon':
 if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 if (!isGroup) return reply(mess.only.group)
-if (!isGroupAdmins) return reply(mess.only.admin)
+if (!isGroupAdmins) return sticNoAdm(from)
 if (args.length < 1) return reply(`≡ _¿Cómo activar el Anti-Bot-Tiburon ?_\n\n┌─⊷ *ANTI-BOT-TIBURON * ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antitiburon 1`)
 if (args[0] === '1') {                             
 						if (isAntiTiburoMierdaBot) return reply('Ya estaba activo 🙄')  
@@ -951,7 +956,7 @@ case 'viewto2':
          case 'antienlacemax':
          if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 					if (!isGroup) return reply(mess.only.group)
-if (!isGroupAdmins) return reply(mess.only.admin)
+if (!isGroupAdmins) return sticNoAdm(from)
 if (args.length < 1) return reply(`≡ _¿Cómo activar el Anti-Enlace?_\n\n┌─⊷ *ANTI-ENLACE-MAX* ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antilinkmax 1`)
 if (args[0] === '1') {                             
 						if (isAntiLinkMax) return reply('Ya estaba activo 🙄')  
@@ -977,7 +982,7 @@ if (args[0] === '1') {
 					case 'antifake':
  
 					if (!isGroup) return reply(mess.only.group)
-					if (!isGroupAdmins) return reply(mess.only.admin)
+					if (!isGroupAdmins) return sticNoAdm(from)
 					if (args.length < 1) return reply(`≡ _¿Cómo activar el Anti-Fake?_\n\n┌─⊷ *ANTI-FAKE* ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antifake 1`) 
 					if (Number(args[0]) === 1) {
 						if (isAntiFake) return reply('Ya estaba activo 🙄')  
@@ -1360,7 +1365,7 @@ case 'enviarimg':
             	if (args.length === 0) return reply(`⬡ Enviar Archivos Del Bot\n¿Como usar?\n\nEjemplo : ${prefix}enviardoc Ruta del archivo\n\nEjemplo : ${prefix}enviardoc lib/exif.js`)
             	name = args.join(" ")
                 buffer = fs.readFileSync(`./${name}`)
-                FxBot.sendMessage(from, buffer, document, {quoted: mek, mimetype : 'image/png', filename: `${name}`})
+                FxBot.sendMessage(from, buffer, image, {quoted: mek, mimetype : 'image/png', filename: `${name}`})
                 } catch {
             	reply(`*▢ No se encontró ${name}\n\n▢ Comprueba si el nombre del archivo es correcto, o su ruta es la correcta.*`)
                 }
@@ -1378,6 +1383,7 @@ case 'enviarimg':
                 break
                         
 			     case 'contag':
+			if (!isGroupAdmins) return sticNoAdm(from)
 					var bv = body.slice(8)
 					var jl = `${bv}`
 					if (args[0] === '') {
@@ -1502,6 +1508,7 @@ fs.unlinkSync(buffer)
 break
 
         case 'hidetag':
+        if (!isGroupAdmins) return sticNoAdm(from)
 					if (!isGroup) return reply(mess.only.group)
 					var value = body.slice(9)
 					var group = await FxBot.groupMetadata(from)
@@ -1521,6 +1528,7 @@ break
 					  
 					
 			           case 'sticktag':
+			if (!isGroupAdmins) return sticNoAdm(from)
                                         if (!isQuotedSticker) return reply('Ini sticker?')
                                         boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
                                         delb = await FxBot.downloadMediaMessage(boij)
@@ -1549,6 +1557,7 @@ break
 					break
 					
 					case 'imgtag':
+					if (!isGroupAdmins) return sticNoAdm(from)
                     if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
                         const encmedia = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : lol
                         filePath = await FxBot.downloadAndSaveMediaMessage(encmedia, filename = getRandom())
@@ -1582,6 +1591,7 @@ break
         case 'linkgrupo':
 				case 'linkgrup':
 				case 'linkgc':
+				if (!isGroupAdmins) return sticNoAdm(from)
 				    if (!isGroup) return reply(mess.only.group)
 				    if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 				    linkgc = await FxBot.groupInviteCode (from)
@@ -1591,6 +1601,7 @@ break
 			        
         
 					case 'hablen':
+					if (!isGroupAdmins) return sticNoAdm(from)
 					if (!isGroup) return reply(mess.only.group)
 					if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 					 
@@ -1598,6 +1609,7 @@ break
 					
 					break
 case 'silencio':
+if (!isGroupAdmins) return sticNoAdm(from)
 					if (!isGroup) return reply(mess.only.group)
 					if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 					 
@@ -1686,6 +1698,7 @@ break
 					
 					case 'demote':
 			      case 'dm' : 
+			if (!isGroupAdmins) return sticNoAdm(from)
 			    if (!isGroup) return reply(mess.only.group)
 					if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 					if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag target yang ingin di tidak jadi admin!')
@@ -1719,6 +1732,7 @@ break
 					 
 					case 'promote':
 				case 'pm':
+				if (!isGroupAdmins) return sticNoAdm(from)
 					if (!isGroup) return reply(mess.only.group)
 					if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 					if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag target yang ingin di jadi admin!')
@@ -1740,7 +1754,7 @@ break
 
  
 					if (!isGroup) return reply(mess.only.group)
-					if (!isGroupAdmins) return reply(mess.only.admin)
+					if (!isGroupAdmins) return sticNoAdm(from)
 					if (args.length < 1) return reply(`≡ _¿Cómo activar la bienvenida?_\n\n┌─⊷ *BIENVENIDA* ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}welcome 1`) 
 					if (Number(args[0]) === 1) {
 					if (isWelkom) return reply('Ya estaba activo 🙄')
@@ -1756,40 +1770,13 @@ break
 					}
                      
             break
-					case 'add':
-					if (!isGroup) return reply(mess.only.group)
-					if (!isBotGroupAdmins) return reply(mess.only.Badmin)
-					if (args.length < 1) return reply('Yang mau di add siapa??')
-					if (args[0].startsWith('08')) return reply('Gunakan kode negara Gan')
-					try {
-						num = `${args[0].replace(/ /g, '')}@s.whatsapp.net`
-						FxBot.groupAdd(from, [num])
-					} catch (e) {
-						console.log('Error :', e)
-						reply('Gagal menambahkan target, mungkin karena di private')
-					}
-					break
+					 
 					
-			    case 'kick':
-					if (!isGroup) return reply(mess.only.group)
-					if (!isBotGroupAdmins) return reply(mess.only.Badmin)
-					if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag target yang ingin di tendang!')
-					mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
-					if (mentioned.length > 1) {
-						teks = 'Perintah di terima, mengeluarkan :\n'
-						for (let _ of mentioned) {
-							teks += `@${_.split('@')[0]}\n`
-						}
-						mentions(teks, mentioned, true)
-						FxBot.groupRemove(from, mentioned)
-					} else {
-						mentions(`Perintah di terima, mengeluarkan : @${mentioned[0].split('@')[0]}`, mentioned, true)
-						FxBot.groupRemove(from, mentioned)
-					}
-					break 
+			     
 					
 										case 'online':
 										  case 'listonline':
+										
                 if (!isGroup) return reply(`Only group`)
                 let ido = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : from
                 let online = [...Object.keys(FxBot.chats.get(ido).presences), FxBot.user.jid]
