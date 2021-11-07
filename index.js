@@ -911,7 +911,7 @@ if (args[0] === '1') {
 					} else {
 						reply(`≡ _¿Cómo activar el Anti-Enlace?_\n\n┌─⊷ *ANTI-ENLACE* ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antilink 1`)
 					}
-            break
+            break 
 case 'antibottiburon':
 if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 if (!isGroup) return reply(mess.only.group)
@@ -1275,6 +1275,18 @@ reply(`▢ Lo siento, no se encontró ningun video relacionado con ${yts}.`)
 }
 break
 
+case 'telesticker':
+link = args.join(" ")
+if (args.length === 0) return reply(`⬡ Descargas de stickers de Telegram\n\n¿Como usar?\n\nEjemplo : ${prefix}telesticker + link\n\nEjemplo : ${prefix}telesticker t.me/addstickers/LINE_Menhera_chan_ENG`)
+
+ini_url = await fetchJson(`https://api.lolhuman.xyz/api/telestick?apikey=DashBot&url=${link}`)
+                    ini_sticker = ini_url.result.sticker
+                    for (sticker_ in ini_sticker) {
+                        ini_buffer = await getBuffer(ini_sticker[sticker_])
+                        FxBot.sendMessage(from, ini_buffer, sticker)
+                    
+ }  
+break
 
 case 'gitclone':
 if (!mek.key.fromMe) return reply('▢ Lo siento, solamente yo puedo usar ese comando.')
