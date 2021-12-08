@@ -12,9 +12,10 @@ const
 		WA_DEFAULT_EPHEMERAL,
 		ReconnectMode,
 		ProxyAgent,
-		GroupsettingsChange,
+		GroupSettingChange,
 		waChatKey,
 		mentionedJid,
+		prepareMessageFromContent, 
 		processTime,
 } = require('@adiwajshing/baileys')
 const qrcode = require("qrcode-terminal") 
@@ -33,7 +34,7 @@ const ffmpeg = require('fluent-ffmpeg')
 const imageToBase64 = require('image-to-base64')
 const lolis = require('lolis.life')
 const SH = require('shthear')
-
+const { mediafireDl } = require('./lib/mediafire.js')
 const loli = new lolis()
 const Exif = require('./lib/exif');
 const exif = new Exif();
@@ -43,7 +44,6 @@ const util = require('util');
 //********** FUNCTIONS **********//
 const { removeBackgroundFromImageFile } = require('remove.bg')
 const { color, bgcolor } = require('./lib/color')
-const { help } = require('./src/help')
 const simple = require('./lib/simple.js')
 const { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, banner, start, info, success, close } = require('./lib/functions')
 const { fetchJson, fetchText } = require('./lib/fetcher')
@@ -66,11 +66,10 @@ const setiker = JSON.parse(fs.readFileSync('./temp/stik.json'))
 const audionye = JSON.parse(fs.readFileSync('./temp/vn.json'))
 const imagenye = JSON.parse(fs.readFileSync('./temp/image.json'))
 const videonye = JSON.parse(fs.readFileSync('./temp/video.json'))
-const { stick } = require('./src/respon');
 
 //*********** CUSTOMABLE ***********//
 
-prefix = settings.prefix
+ 
 f = '_'
 antidel = true
 blocked = []
@@ -110,7 +109,7 @@ const vcard = 'BEGIN:VCARD\n'
             + 'VERSION:3.0\n'
             + 'FN:FxBotシ︎\n'
             + 'ORG:Owner FxBot;\n'
-            + 'TEL;type=CELL;type=VOICE;waid=6281226770537:+62 831-1800-241\n'
+            + 'TEL;type=CELL;type=VOICE;waid=5219984646983:+52 998 464 6983\n'
             + 'END:VCARD'
 
 //*********** 𝗔𝗣𝗜𝗞𝗘𝗬 ***********//
@@ -165,12 +164,12 @@ async function starts() {
 	})
 	fs.existsSync('./FxBot_Connection.json') && FxBot.loadAuthInfo('./FxBot_Connection.json')
 	FxBot.on('connecting', () => {
-	start('2', 'Conectando...')
-	})
+	start('2', ' ')
+}) 
 	FxBot.on('open', () => {
-	success('2', `Conectado\n\n\nBot WhatsApp Con NodeJS hecho por Felixcrack\n\n\nEscribe .public para iniciar el bot`)
+	success('2', `Conectado\n\n\nBot WhatsApp Con NodeJS hecho por Felixcrack\n\n\nEscribe .menu en un chat de WhatsApp para iniciar el bot`)
 	})
-	FxBot.sendMessage(`12607825660@s.whatsapp.net`, `─────「 *CONECTADO* 」─────\n\n▢ Conectado exitomekente con su WhatsApp, para iniciar el bot, escribe .public\n\n▢ Este bot es creado por FxTeam\n\n▢ Canal Oficial de YT : https://youtube.com/c/Felixcrack409\n\n▢ Grupo de soporte por si tienes alguna duda : https://chat.whatsapp.com/LOHYHhBJRjG7ruk67QkExj\n\n▢ Recomendaciones para que el bot no se apagué\n\n▢ Quítale la optimización de la batería al WhatsApp donde tengas al bot\n\n▢ Quítale la optimización de la batería a Termux\n\n▢ Copyright Felixcrack 409 ©\n\n─────「 *FXBOT* 」─────`, MessageType.text, {contextInfo: { forwardingScore: 508, isForwarded: true, externalAdReply:{title: "Developer Fx-Bot",body:"",previewType:"PHOTO",thumbnail:fs.readFileSync('./media/FxBot.jpeg'),sourceUrl:"https://wa.me/529984646983?text=© FxBot Team"}}})
+	FxBot.sendMessage(`5219984646983@s.whatsapp.net`, `─────「 *CONECTADO* 」─────\n\n▢ Conectado exitosamente con su WhatsApp, para iniciar el bot, escribe .menu en un chat de WhatsApp.\n\n▢ Este bot es creado por FxTeam\n\n▢ Canal Oficial de YT : https://youtube.com/c/Felixcrack409\n\n▢ Grupo de soporte por si tienes alguna duda : https://chat.whatsapp.com/LOHYHhBJRjG7ruk67QkExj\n\n▢ Recomendaciones para que el bot no se apagué\n\n▢ Quítale la optimización de la batería al WhatsApp donde tengas al bot\n\n▢ Quítale la optimización de la batería a Termux\n\n▢ Copyright Felixcrack 409 ©\n\n─────「 *FXBOT* 」─────`, MessageType.text, {contextInfo: { forwardingScore: 508, isForwarded: true, externalAdReply:{title: "Click aqui",body:"",previewType:"PHOTO",thumbnail:fs.readFileSync('./media/FxBot.jpeg'),sourceUrl:"https://wa.me/529984646983?text=Hola soy : \n\nTengo una duda/problema/error con el bot."}}})
 	await FxBot.connect({timeoutMs: 30*1000})
 	 
     fs.writeFileSync('./FxBot_Connection.json', JSON.stringify(FxBot.base64EncodedAuthInfo(), null, '\t'))
@@ -225,7 +224,7 @@ const mdata = await FxBot.groupMetadata(anu.jid)
        time_wel = moment.tz("America/Mexico_City").format("HH:mm")
         let w = FxBot.contacts[num] || { notify: num.replace(/@.+/, "") }
        
-        out = `Adios Pedazo De Aborto 🥺👍🏿 Nunca Te Quisimos 👋🏻`
+        out = `${leave}`
  try {
         pp_user = await FxBot.getProfilePicture(num)
       } catch (e) {
@@ -259,7 +258,7 @@ const mdata = await FxBot.groupMetadata(anu.jid)
           })
         ).imageMessage
         buttonsMessage = {
-          contentText: `🪀 「 Bienvenid@ 」 🪀\n\n¡Hola @${anu_user}!\n\n ¿Como estas?\n\nYo soy FxBot y te doy la bienvenida a : ${mdata.subject}\n\n🪀 Usuarios: ${memeg}\n\n🪀 Administradores: ${groupAdmins.length}\n\n🪀 Reglas Del Grupo: \n\n${mdata.desc}`,
+          contentText: `🪀${prefix} 「 Bienvenid@ 」 🪀${prefix}\n\n¡Hola @${anu_user}!\n\n ¿Como estas?\n\nYo soy FxBot y te doy la bienvenida a : ${mdata.subject}\n\n🪀${prefix} Usuarios: ${memeg}\n\n🪀${prefix} Administradores: ${groupAdmins.length}\n\n🪀${prefix} Reglas Del Grupo: \n\n${mdata.desc}`,
            
           imageMessage: imageMsg,
           buttons: buttons,
@@ -325,6 +324,15 @@ const mdata = await FxBot.groupMetadata(anu.jid)
 })
   
 
+/********** FUCTION BATERIA **********/
+FxBot.on('CB:action,,battery', json => {
+global.batteryLevelStr = json[2][0][1].value
+global.batterylevel = parseInt(batteryLevelStr)
+var baterai = batterylevel
+if (json[2][0][1].live == 'true') charging = true
+if (json[2][0][1].live == 'false') charging = false
+console.log(color('🔋Carga de la bateria: ' + batterylevel+'%', "yellow"))
+})
 
 	FxBot.on('CB:Blocklist', json => {
             if (blocked.length > 2) return
@@ -359,7 +367,7 @@ FxBot.sendMessage(group.id, teks, MessageType.text)
 }
 })
 
-	FxBot.on('message-delete', async (m) => {
+	FxBot.on('message-delete', async (chat) => {
  
 if (m.key.remoteJid == 'status@broadcast') return
 if (m.key.fromMe) return
@@ -378,14 +386,17 @@ FxBot.on('chat-update', async (mek) => {
         if (!mek.message) return
         if (mek.key && mek.key.remoteJid == 'status@broadcast') return
         global.blocked
+        global.p
         mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
    
 			global.prefix
 			global.blocked
+			const type = Object.keys(mek.message)[0]        
+			const cmd = (type === 'conversation' && mek.message.conversation) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text ? mek.message.extendedTextMessage.text : (type == 'stickerMessage') && (getCmd(mek.message.stickerMessage.fileSha256.toString('hex')) !== null && getCmd(mek.message.stickerMessage.fileSha256.toString('hex')) !== undefined) ? getCmd(mek.message.stickerMessage.fileSha256.toString('hex')) : "".slice(1).trim().split(/ +/).shift().toLowerCase()
+            const prefix = /^[°•π÷×¶∆£¢€¥®™=|~!#$%^&.?/\\©^z+*@,;]/.test(cmd) ? cmd.match(/^[°•π÷×¶∆£¢€¥®™=|~!#$%^&.?/\\©^z+*,;]/gi) : '-'          	
 			const content = JSON.stringify(mek.message)
 			const from = mek.key.remoteJid
-			const type = Object.keys(mek.message)[0]
-			const apiKey = settings.apiKey 
+			 const apiKey = settings.apiKey 
 			const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
 			const time = moment.tz('Asia/Jakarta').format('DD/MM HH:mm:ss')
 			const date = new Date().toLocaleDateString()
@@ -394,8 +405,10 @@ FxBot.on('chat-update', async (mek) => {
       const wit = moment.tz('Asia/Jayapura').format('HH:mm:ss')
         const senderme = mek.participant
         symantec = (type === 'listResponseMessage') ? mek.message.listResponseMessage.selectedDisplayText : ''
-   body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : (type == 'stickerMessage') && (getCmd(mek.message.stickerMessage.fileSha256.toString('hex')) !== null && getCmd(mek.message.stickerMessage.fileSha256.toString('hex')) !== undefined) ? (getCmd(mek.message.stickerMessage.fileSha256.toString('hex')).startsWith(prefix) ? getCmd(mek.message.stickerMessage.fileSha256.toString('hex')) : '') : ""
-		budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
+   /************** BUDY DO AUTO RESPONDER ************/
+const body = (type === 'listResponseMessage' && mek.message.listResponseMessage.title) ? mek.message.listResponseMessage.title : (type === 'buttonsResponseMessage' && mek.message.buttonsResponseMessage.selectedButtonId) ? mek.message.buttonsResponseMessage.selectedButtonId : (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : (type == 'stickerMessage') && (getCmd(mek.message.stickerMessage.fileSha256.toString('base64')) !== null && getCmd(mek.message.stickerMessage.fileSha256.toString('base64')) !== undefined) ? getCmd(mek.message.stickerMessage.fileSha256.toString('base64')) : ""
+budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
+selectedButton = (type == 'buttonsResponseMessage') ? mek.message.buttonsResponseMessage.selectedButtonId : ''
 		const command = body.slice(1).trim().split(/ +/).shift().toLowerCase()
 			const args = body.trim().split(/ +/).slice(1)
 			const isCmd = body.startsWith(prefix)
@@ -418,7 +431,7 @@ FxBot.on('chat-update', async (mek) => {
 				Iv: '▢ Verifica que el link sea correcto.',
 			},
 			only: {
-				group: '▢ Este comando solo puede ser usado en gruposp.',
+				group: '▢ Este comando solo puede ser usado en grupos.',
 				admin: '▢ Lo siento.\n\nNo eres administrador del grupo.',
 				Badmin: '▢ El bot necesita ser admin para poder usar este comando'
 			}
@@ -448,9 +461,8 @@ FxBot.on('chat-update', async (mek) => {
 			const isOwner = ownerNumber.includes(sender)
 			const q = args.join(' ')
 			const isUrl = (url) => {
-				
-			    return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi'))
-			}
+        return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%.+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%+.~#?&/=]*)/, 'gi'))
+        }
 			const reply = (teks) => {
 				FxBot.sendMessage(from, teks, text, {quoted:freply})
 			}
@@ -500,7 +512,7 @@ const sticWait = (hehe) => {
 		}
 
 const freply = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc", "mimetype": "image/jpeg", "caption": fake, "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=", "fileLength": "28777", "height": 1080, "width": 1079, "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=", "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=", "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69", "mediaKeyTimestamp": "1610993486", "jpegThumbnail": fs.readFileSync(`media/FxBot.jpeg`)} } }
-
+const ofrply = fs.readFileSync('./media/FxBot.jpeg')
 const ftoko = {
 key: {
 			fromMe: false,
@@ -603,7 +615,31 @@ console.log(e)
 })
 }
 
+const Sendbutdocument = async(id, text1, desc1, file1, doc1, but = [], options = {}) => {
+media = file1
+kma = doc1
+mhan = await FxBot.prepareMessage(from, media, document, kma)
+const buttonMessages = {
+documentMessage: mhan.message.documentMessage,
+contentText: text1,
+footerText: desc1,
+buttons: but,
+headerType: "DOCUMENT"
+}
+FxBot.sendMessage(id, buttonMessages, MessageType.buttonsMessage, options)
+}
 
+const floc = {
+	key : {
+           participant : '0@s.whatsapp.net'
+                        },
+       message: {
+                    liveLocationMessage: {
+                    caption: `s`,
+                    jpegThumbnail: fakeimg
+                          }
+                        }
+                      }
 const sendFakeThumb = async function(from, url, title, desc){
 				var anoim = {
 					detectLinks: false
@@ -823,79 +859,99 @@ FxBot.updatePresence(from, Presence.recording)
 			switch(command) {
 			  
 			
-			     case 'help':
-                case 'menu':
-                const chatsIds = await FxBot.chats.all()
+			      
+         case '𝑀𝑒𝑛𝑢𝐴𝑙𝑙':
+  case 'allmenu':
+  case 'menu': 
+        uwu = '```' 
+        const chatsIds = await FxBot.chats.all()
                 const timestamp = speed();
                 uptime = process.uptime()
                 const latensi = speed() - timestamp 
-
-
-teks = `───── ● BOT INFO ● ─────
-◈ 💫 *Prefijo :*${prefix}
-◈ 💫 *Runtime :*_${kyun(uptime)}_
-◈ 💫 *Velocidad :*_${latensi.toFixed(4)} segundos_
-◈ 💫 *Total De Chats :*_${totalchat.length}_
-
-┌─── ● MENU PRINCIPAL ● ───
-│◈ ⭐ *antienlace* 
-├◇ Elimina por enlaces de WhatsApp.
-│◈ ⭐ *antienlacemax * 
-├◇ Elimina por todo tipo de enlaces.
-│◈ ⭐ *antifake * 
-├◇ Elimina números virtuales.
-│◈ ⭐ *antimedia * 
-├◇ Elimina al que mande un archivo.
-│◈ ⭐ *autosticker * 
-├◇ Crea stickers automáticos.
-│◈ ⭐ *antibottiburon * 
-├◇ Elimina al bot Tiburón.
-│◈ ⭐ *antitrava * 
-├◇ Elimina a quien mande travas.
-│
-├───── ● MENU TAG's ● ─────
-│◈ 🗡️ *hidetag* 
-├◇ Menciona a todos con texto.
-│◈ 🗡️ *imgtag*
-├◇ Menciona a todos con una imagen.
-│◈ 🗡️ *sticktag* 
-├◇ Menciona a todos con un sticker.
-│◈ 🗡️ *contag*
-├◇ Menciona a todos con un contacto.
-│
-├───── ● DUEÑO ● ─────
-│◈ 🤖 *self *
-├◇ Solo tu podras usar el bot.
-│◈ 🤖 *public* 
-├◇ Para que todos puedan usar el bot.
-│◈ 🤖 *entrar_al_grupo*
-├◇ Entrar a algun grupo.
-│◈ 🤖 *term*
-├◇ Ejecuta un comando de Termux.
-│
-├───── ● GRUPO ● ─────
-│◈ 🪀 *linkgrupo *
-├◇ Obtén el enlace del grupo
-├───── ● DESCARGAS ● ─────
-│◈ 🌹 *play *
-├◇ Descarga una audio de YouTube.
-│◈ 🌹 *ytmp3 *
-├◇ Descarga un audio de YouTube.
-│◈ 🌹 *ytmp4 *
-├◇Descarga una video de YouTube.
-│◈ 🌹 *nhentai *
-├◇ Descarga hentai en forma de PDF.
-│◈ 🌹 *gitclone *
-├◇ Descarga un git de GitHub.
-│◈ 🌹 *githubstalk*
-├◇ Obtén información de un usuario de GitHub.
-└──────────────────`
-     FxBot.sendMessage(from, teks, MessageType.text, {sendEphemeral: true, quoted: ftroli, contextInfo: { forwardingScore: 9999, isForwarded: true, externalAdReply : { title : `私は道です`, body : "FX - BOT ⁴̅⁰͍⁴̵", mediaType: 2, thumbnail: fs.readFileSync('./media/FxBot.jpeg'), mediaUrl : `https://youtu.be/Np08yVjpnWU`}}})
-
-
- 
+tescok = `┌──▢「 *BOT INFO* 」
+│*Prefijo :*${prefix}
+│*Runtime :*_${kyun(uptime)}_
+│*Velocidad :*_${latensi.toFixed(4)} _s_
+│*Total De Chats :*_${totalchat.length}_
+└──▢  
+┌──▢  「 *SEGURIDAD* 」
+├▢ ${prefix}antienlace
+├▢ ${prefix}antienlacemax 
+├▢ ${prefix}antifake
+├▢ ${prefix}autosticker
+├▢ ${prefix}antitrava
+└──▢  
+┌──▢  「 *TAG's* 」
+├▢ ${prefix}hidetag
+├▢ ${prefix}imgtag
+├▢ ${prefix}sticktag
+├▢ ${prefix}contag
+└──▢  
+┌──▢  「 *DUEÑO* 」
+├▢ ${prefix}self 
+├▢ ${prefix}public
+├▢ ${prefix}entrar_al_grupo
+├▢ ${prefix}term*
+├▢ ${prefix}leave
+└──▢  
+┌──▢  「 *GRUPO* 」
+├▢ ${prefix}linkgrupo
+├▢ ${prefix}dm
+├▢ ${prefix}pm
+├▢ ${prefix}listonline
+└──▢  
+┌──▢  「 *DESCARGAS* 」
+├▢ ${prefix}play
+├▢ ${prefix}ytmp3
+├▢ ${prefix}ytmp4
+├▢ ${prefix}ytdl
+├▢ ${prefix}mediafire
+├▢ ${prefix}nhentai
+├▢ ${prefix}gitclone
+├▢ ${prefix}githubstalk
+└──▢`
+Sendbutdocument(from, tescok, "_𝐹𝑒𝑙𝑖𝑥𝑐𝑟𝑎𝑐𝑘 𝐵𝑜𝑡_", fs.readFileSync('./media/Fx.pdf'), {mimetype:Mimetype.pdf, thumbnail:fs.readFileSync('./media/ft_dcm.jpg'), filename:`Felixcrack.pdf`, pageCount: 9999999999 }, [{buttonId:`${prefix}rds`,buttonText:{displayText:'𝑅𝑒??𝑒𝑠 𝑆𝑜𝑐𝑖𝑎𝑙𝑒𝑠'},type:1}], {quoted: ftoko, contextInfo: { mentionedJid: [], forwardingScore: 508, isForwarded: true, externalAdReply:{title:`𝐵𝑜𝑡 𝐷𝑒 𝑊ℎ𝑎𝑡𝑠𝐴𝑝𝑝 𝐵𝑦 𝐹𝑒𝑙𝑖𝑥𝑐𝑟𝑎𝑐𝑘`,mediaType:"2",thumbnail:ofrply,mediaUrl:`https://youtu.be/Np08yVjpnWU`}}})
 break
-         
+case 'rds':
+		FxBot.sendMessage(from, { text : `*𝐹𝑒𝑙𝑖𝑥𝑐𝑟𝑎𝑐𝑘 𝐵𝑜𝑡 𝑂𝑓𝑐*\n\n> https://github.com/Fxmods/\n> https://youtube.com/c/Felixcrack409\n> https://chat.whatsapp.com/E6UCJqYBUKBAQDLtU2CQyD\n\n╶\nRecuerda seguirme en YouTube &\nGitHub : @⁨Fxmods`, matchedText: '-', description: "", title: "HAGA CLIC PARA SEGUIR", jpegThumbnail: ofrply }, 'extendedTextMessage', { detectLinks: true, contextInfo: { forwardingScore: 508, isForwarded: true}, quoted: ftoko})
+		break
+
+case 'gc':
+FxBot.sendMessage(from, { text : `*𝐹𝑒𝑙𝑖𝑥𝑐𝑟𝑎𝑐𝑘 𝐵𝑜𝑡 𝑂𝑓𝑐*\n\n> https://chat.whatsapp.com/E6UCJqYBUKBAQDLtU2CQyD`, matchedText: '-', description: "", title: "HAGA CLIC PARA SEGUIR", jpegThumbnail: ofrply }, 'extendedTextMessage', { detectLinks: true, contextInfo: { forwardingScore: 508, isForwarded: true}, quoted: ftoko})
+break
+case 'ytdl':
+teks = args.join(' ')
+getid = await fetchJson(`https://api-alphabot.herokuapp.com/api/downloader/youtube/playmp3?query=${teks}&apikey=Alphabot`)
+anu = await fetchJson(`https://hadi-api.herokuapp.com/api/aboutyt?url=https://youtu.be/${getid.results.id}`)
+etv = await getBuffer(`${anu.result.album}`)
+ txtt =`*<DESCARGA YOUTUBE\>*
+
+き⃟📝Titulo : ${anu.result.judul}
+き⃟👤Canal : ${anu.result.channel}
+き⃟⌛Duración : ${anu.result.length}
+き⃟💌Categoría : ${anu.result.kategori}
+き⃟👁️Vistas : ${anu.result.view}
+き⃟👍🏻Likes : ${anu.result.like}
+き⃟👎🏻Dislike : ${anu.result.dislike}
+き⃟🌎Subida : ${anu.result.tanggalupload}
+き⃟🎲Descripción : ${anu.result.desc}`
+               gbutsan = [
+  {buttonId: `${prefix}ytmp3 https://youtu.be/${getid.results.id}`, buttonText: {displayText: '⎙ MP3'}, type: 1},
+  {buttonId: `${prefix}ytmp4 https://youtu.be/${getid.results.id}`, buttonText: {displayText: '⎙ MP4'}, type: 1},
+]
+               imageMsg = (await FxBot.prepareMessageMedia(etv, 'imageMessage', {thumbnail: etv})).imageMessage              
+               buttonsMessage = {
+               contentText: `${txtt}`,
+               footerText: 'Seleccione su tipo de archivo.', imageMessage: imageMsg,
+               buttons: gbutsan,
+               headerType: 4
+}
+               prep = await FxBot.prepareMessageFromContent(from,{buttonsMessage},{quoted: mek})
+               FxBot.relayWAMessage(prep)
+        break       
+
+
+
 case 'antilink':
 case 'antienlace':
 if (!isBotGroupAdmins) return reply(mess.only.Badmin)
@@ -917,26 +973,7 @@ if (args[0] === '1') {
 						reply(`≡ _¿Cómo activar el Anti-Enlace?_\n\n┌─⊷ *ANTI-ENLACE* ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antilink 1`)
 					}
             break 
-case 'antibottiburon':
-if (!isBotGroupAdmins) return reply(mess.only.Badmin)
-if (!isGroup) return reply(mess.only.group)
-if (!isGroupAdmins) return sticNoAdm(from)
-if (args.length < 1) return reply(`≡ _¿Cómo activar el Anti-Bot-Tiburon ?_\n\n┌─⊷ *ANTI-BOT-TIBURON * ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antitiburon 1`)
-if (args[0] === '1') {                             
-						if (isAntiTiburoMierdaBot) return reply('Ya estaba activo 🙄')  
-						antitiburon.push(from)
-						fs.writeFileSync('./src/antibot.json', JSON.stringify(antitiburon))
-						reply('▢ El Anti-Bot-Tiburon se ah activado con éxito. ✔️')
-					} else if (Number(args[0]) === 0) {
-						if (!isAntiTiburoMierdaBot) return reply('Anti-Enlace desactivado.')
-						var ini = antitiburon.indexOf(from)
-						antitiburon.splice(ini, 1)
-						fs.writeFileSync('./src/antibot.json', JSON.stringify(antitiburon))
-						reply('▢ El Anti-Bot-Tiburon se ah desactivado con éxito. ✔️')
-					} else {
-						reply(`≡ _¿Cómo activar el Anti-Bot-Tiburon?_\n\n┌─⊷ *ANTI-BOT-TIBURON * ⊶\n├▢ 1 para activar\n├▢ 0 para desactivar\n└─────────────\n\n≡ Ejemplo :\n\n${prefix}antitiburon 1`)
-					}
-            break
+ 
 
 
 case 'viewto2':
@@ -975,9 +1012,7 @@ if (args[0] === '1') {
 					}
 					break
 
-                case '?':
-					FxBot.sendMessage(from, help(prefix), text,{contextInfo: {forwardingScore : 508, isForwarded: true},quoted : freply})
-					break
+                 
 					
 					case 'antifake':
  
@@ -1032,16 +1067,44 @@ if (args[0] === '1') {
 				break
 				
 				  case 'entrar_al_grupo':
-                           if (!q) return reply('Masukan link group')
+                           if (!q) return reply('Ingrese al enlace de grupo.')
                            var codeInvite = body.slice(6).split('https://chat.whatsapp.com/')[1]
-                           if (!codeInvite) return fakegroup ('pastikan link sudah benar!')
+                           if (!codeInvite) return fakegroup ('¡Asegúrese de que el enlace sea correcto!')
                            var response = await FxBot.acceptInvite(codeInvite);
                            console.log(response);
                            break
   
                 
-             
-				
+             case 'abc':
+					let luck = FxBot.prepareMessageFromContent(from, {
+						"listMessage":  {
+							"title": "*ESTO ES UNA PRUEBA*",
+							"description": `wait`,
+							"buttonText": "Selecciona una opción.",
+							"listType": "SINGLE_SELECT",
+							"sections": [
+								{
+									"rows": [
+										{
+											"title": `𝐀𝐛𝐫𝐢𝐫 𝐞𝐥 𝐠𝐫𝐮𝐩𝐨`,
+											"rowId": `𝐀𝐛𝐫𝐢𝐫 𝐞𝐥 𝐠𝐫𝐮𝐩𝐨`
+										},
+										{
+											"title": `𝐂𝐞𝐫𝐫𝐚𝐫 𝐞𝐥 𝐠𝐫𝐮𝐩𝐨`,
+											"rowId": `𝐂𝐞𝐫𝐫𝐚𝐫 𝐞𝐥 𝐠𝐫𝐮𝐩𝐨`
+										}
+									]
+								}
+							]
+						}
+					}, {})
+				FxBot.relayWAMessage(luck, {waitForAck: true})
+				break
+		
+				case 'i':
+				reply ('a')
+				break
+
 				case 'blocklist':
 				  case 'listblock':
 					teks = 'This is list of blocked number :\n'
@@ -1131,11 +1194,39 @@ FxBot.sendMessage(from, buffer, document, {quoted: mek, mimetype : 'application/
 } catch {
 reply(`*▢ No se encontró ningún resultado.`)
 }
-break                    
+break      
+
+    case 'igstalk':
+case 'instagramstalk':
+try {
+			if (args.length === 0) return reply(`⬡ Búsqueda de Instagram\n\n¿Como usar?\n\nEjemplo : ${prefix + command} Nombre del usuario\n\nEjemplo : ${prefix + command} Fxmods`)
+		busqueda = args.join(" ")
+anu = await fetchJson(`https://api.lolhuman.xyz/api/stalkig/${busqueda}?apikey=DashBot`)
+gt = anu.result
+                if (anu.error) return reply(anu.error)
+                github = `                「 *INSTAGRAM*  」
+              
+
+▢ Nombre Completo : ${gt.fullname}     
+▢ Nombre De Usuario : ${gt.username}
+▢ Siguiendo : ${gt.following}
+▢ Seguidores : ${gt.followers}
+▢ Posts : ${gt.posts}
+▢ Bio : ${gt.bio}
+
+▢ Información sobre el usuario ${gt.username}.`
+buffer = await getBuffer(gt.photo_profile)
+FxBot.sendMessage(from, buffer, image, {quoted: ftoko, caption: github})
+} catch {
+reply(`▢ Lo siento, no se encontró ningún usuario relacionado con ${busqueda}.`)
+}
+break 
+         
 		case 'githubstalk':
 		try {
 			if (args.length === 0) return reply(`⬡ Búsqueda de GitHub\n\n¿Como usar?\n\nEjemplo : ${prefix}githubstalk Nombre del usuario\n\nEjemplo : ${prefix}githubstalk Fxmods`)
 		sh = args.join(" ")
+		sticWait(from)
 		 anu = await fetchJson(`http://hadi-api.herokuapp.com/api/githubstalk?username=${sh}`)
 
 gt = anu.result
@@ -1203,6 +1294,54 @@ reply(`▢ Lo siento, no se encontró ningun audio relacionado con ${yts}.`)
 }
         break
 
+
+
+case 'play2':
+try {
+if (args.length === 0) return reply(`⬡ Descargar Música\n\n¿Como usar?\n\nEjemplo : ${prefix}play Control NCS`)
+yts = args.join(" ")
+sticWait(from)
+async function sendFileFromDts(from, url, caption, mek, men) {
+            let mime = '';
+            let res = await axios.head(url)
+            mime = res.headers['content-type']
+            let type = mime.split("/")[0]+"Message"
+            if(mime === "image/gif"){
+                type = MessageType.video
+                mime = Mimetype.gif
+            }
+            if(mime.split("/")[0] === "audio"){
+                mime = Mimetype.mp4Audio
+            }
+            return FxBot.sendMessage(from, await getBuffer(url), type, {caption: caption, ptt: false, sendEphemeral: true, quoted: mek, mimetype: mime, contextInfo: { forwardingScore: 9999, isForwarded: true, "mentionedJid": men ? men : []}})
+            }
+anu = await fetchJson(`https://api.lolhuman.xyz/api/ytplay?apikey=DashBot&query=${yts}`)
+console.log(color(time, 'yellow'), color('▢ Iniciando Servidor...'))
+ 
+                abuela = anu.result
+                if (anu.error) return reply(anu.error)
+                infomp3 = `                「 *MÚSICA*  」
+       
+▢ Título : ${abuela.title}
+▢ ID : ${abuela.id}
+▢ Cargado : ${abuela.uploader}
+▢ Canal : ${abuela.channel}
+▢ Duración : ${abuela.duration}
+▢ Vistas : ${abuela.view}
+▢ Likes : ${abuela.like}
+▢ Dislikes : ${abuela.uploader}
+▢ Descripción : ${abuela.description}
+▢ Tasa de bits : ${abuela.bitrate}
+                
+▢ Enviando archivo, espere por favor... `
+                buffer = await getBuffer(abuela.thumbnail)
+                FxBot.sendMessage(from, buffer, image, {quoted: ftroli, caption: infomp3})
+        sendFileFromDts(from, abuela.audio_link, mek)
+        } catch {
+        	console.log('Ocurrio un error con el servidor, o no se encontró ningun resultado.')
+reply(`▢ Lo siento, no se encontró ningun audio relacionado con ${yts}.`)
+}
+        break
 case 'ytmp3':
 try {
 if (args.length === 0) return reply(`⬡ Descargar Música\n\n¿Como usar?\n\nEjemplo : ${prefix}ytmp3 Control NCS`)
@@ -1327,31 +1466,25 @@ break
 
 
 
+ 
+
 case 'mediafire':
 if (args.length < 1) return reply('¿Y el enlace?')
-if(!isUrl(args[0]) && !args[0].includes('mediafire')) return reply(mess.error.api)
-if (Number(filesize) >= 30000) return reply(`*「 MEDIAFIRE DOWNLOAD 」*
-
-*🔖 Nombre :* ${res[0].nama}
-*🔖 Tamaño :* ${res[0].size}
-*🔖 Enlace :* ${res[0].link}
-
-_Lo sentimos, el tamaño supera el límite máximo, haga clic en el enlace de arriba_`)
+if(!isUrl(args[0]) && !args[0].includes('mediafire')) return reply('▢ Ocurrió un error')
 sticWait(from)
 teks = args.join(' ')
 res = await mediafireDl(teks)
-result = `*「 MEDIAFIRE DOWNLOAD 」*
+result = `
+き⃟❗️MEDIAFIRE DOWNLOAD❗⃟ き
 
-*¡Datos obtenidos con éxito!*
-\`\`\`🔖 Nlmbre : ${res[0].nama}\`\`\`
-\`\`\`🔖 Tamaño : ${res[0].size}\`\`\`
-\`\`\`🔖 Enlace : ${res[0].link}\`\`\`
+📁 Nombre : ${res[0].nama}
+📊 Tamaño : ${res[0].size}
+🧧 Enlace : ${res[0].link}
 
-_El archivo se está enviando, espere unos minutos..._`
+_*Espere, enviando archivo....*_`
 reply(result)
 sendFileFromUrl(res[0].link, document, {mimetype: res[0].mime, filename: res[0].nama, quoted: mek})
 break
-
 
 
 
@@ -1365,7 +1498,7 @@ case 'enviarimg':
             	if (args.length === 0) return reply(`⬡ Enviar Archivos Del Bot\n¿Como usar?\n\nEjemplo : ${prefix}enviardoc Ruta del archivo\n\nEjemplo : ${prefix}enviardoc lib/exif.js`)
             	name = args.join(" ")
                 buffer = fs.readFileSync(`./${name}`)
-                FxBot.sendMessage(from, buffer, image, {quoted: mek, mimetype : 'image/png', filename: `${name}`})
+                FxBot.sendMessage(from, buffer, document, {quoted: mek, mimetype : 'application/pdf', filename: `${name}`})
                 } catch {
             	reply(`*▢ No se encontró ${name}\n\n▢ Comprueba si el nombre del archivo es correcto, o su ruta es la correcta.*`)
                 }
@@ -1383,8 +1516,9 @@ case 'enviarimg':
                 break
                         
 			     case 'contag':
-			if (!isGroupAdmins) return sticNoAdm(from)
-					var bv = body.slice(8)
+			if (!isGroup) return reply(mess.only.group)
+        if (!isGroupAdmins) return sticNoAdm(from)
+            var bv = body.slice(8)
 					var jl = `${bv}`
 					if (args[0] === '') {
 					var jl = `*CONTACT TAG*`
@@ -1485,9 +1619,11 @@ case 'sticker': case 'stickergif': case 'sgif':
 							.toFormat('webp')
 							.save(ran)
 					} else {
-						reply(`Kirim gambar dengan caption ${prefix}sticker atau tag gambar yang sudah dikirim`)
+						reply(`▢ Responde a una imagen, video o GIF.`)
 					}
 					break
+
+
 
 
 
@@ -1508,6 +1644,7 @@ fs.unlinkSync(buffer)
 break
 
         case 'hidetag':
+        if (!isGroup) return reply(mess.only.group)
         if (!isGroupAdmins) return sticNoAdm(from)
 					if (!isGroup) return reply(mess.only.group)
 					var value = body.slice(9)
@@ -1528,6 +1665,7 @@ break
 					  
 					
 			           case 'sticktag':
+			if (!isGroup) return reply(mess.only.group)
 			if (!isGroupAdmins) return sticNoAdm(from)
                                         if (!isQuotedSticker) return reply('Ini sticker?')
                                         boij = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
@@ -1557,6 +1695,7 @@ break
 					break
 					
 					case 'imgtag':
+					if (!isGroup) return reply(mess.only.group)
 					if (!isGroupAdmins) return sticNoAdm(from)
                     if ((isMedia && !mek.message.videoMessage || isQuotedImage) && args.length == 0) {
                         const encmedia = isQuotedImage ? JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : lol
@@ -1582,7 +1721,7 @@ break
                     
                     case 'owner':
                  FxBot.sendMessage(from, {displayname: "jeff", vcard: vcard}, MessageType.contact, { quoted: freply})
-                 FxBot.sendMessage(from, 'Jika Mau Save Chat Aja Gan Ntar Disave Back:)',text, { quoted: freply} )
+                 FxBot.sendMessage(from, '▢ Este es el número de mi creador, no hagas spam.',text, { quoted: freply} )
                  break
  
         
@@ -1595,7 +1734,7 @@ break
 				    if (!isGroup) return reply(mess.only.group)
 				    if (!isBotGroupAdmins) return reply(mess.only.Badmin)
 				    linkgc = await FxBot.groupInviteCode (from)
-				    yeh = `https://chat.whatsapp.com/${linkgc}\n\nlink Group *${groupName}*`
+				    yeh = `https://chat.whatsapp.com/${linkgc}\n\nLink del grupo : *${groupName}*`
 				    FxBot.sendMessage(from, yeh, text, {quoted: freply})
 			        break
 			        
@@ -1616,7 +1755,7 @@ if (!isGroupAdmins) return sticNoAdm(from)
 						FxBot.groupsettingsChange(from, GroupsettingsChange.messageSend, true)
 					
 					break
-case 'prueba2':
+case 'fhfhfhfhcbdnmsxl':
 
 let fx1 = FxBot.prepareMessageFromContent(from,{
           "listMessage": {
@@ -1690,11 +1829,7 @@ case 'testtt':
 				}, {}) 
 FxBot.relayWAMessage(res)
 break
-					case 'chatlist':
-				case 'cekchat':
-					FxBot.updatePresence(from, Presence.composing)
-					FxBot.sendMessage(from, `Total : ${totalchat.length} Chat`, text, {quoted  : freply})
-					break
+					 
 					
 					case 'demote':
 			      case 'dm' : 
@@ -1704,14 +1839,14 @@ break
 					if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag target yang ingin di tidak jadi admin!')
 					mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
 					if (mentioned.length > 1) {
-						teks = 'Perintah di terima, anda tidak menjadi admin :\n'
+						teks = 'Ordenes recibidas, ya no eres administrador :\n'
 						for (let _ of mentioned) {
 							teks += `@${_.split('@')[0]}\n`
 						}
 						mentions(teks, mentioned, true)
 						FxBot.groupDemoteAdmin(from, mentioned)
 					} else {
-						mentions(`Perintah di terima, Menurunkan : @${mentioned[0].split('@')[0]} Menjadi Member`, mentioned, true)
+						mentions(`Demote : @${mentioned[0].split('@')[0]}`, mentioned, true)
 						FxBot.groupDemoteAdmin(from, mentioned)
 					}
 					break
@@ -1721,7 +1856,7 @@ break
 				case 'adminlist':
 				case 'adminslist':
 					if (!isGroup) return reply(mess.only.group)
-					teks = `List admin of group *${groupMetadata.subject}*\nTotal : ${groupAdmins.length}\n\n`
+					teks = `Admins del grupo : *${groupMetadata.subject}*\nTotal : ${groupAdmins.length}\n\n`
 					no = 0
 					for (let admon of groupAdmins) {
 						no += 1
@@ -1738,14 +1873,14 @@ break
 					if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('Tag target yang ingin di jadi admin!')
 					mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
 					if (mentioned.length > 1) {
-						teks = 'Perintah di terima, anda menjdi admin :\n'
+						teks = 'Ordenes recibidas, felicidades, ahora eres administrador :\n'
 						for (let _ of mentioned) {
 							teks += `@${_.split('@')[0]}\n`
 						}
 						mentions(teks, mentioned, true)
 						FxBot.groupMakeAdmin(from, mentioned)
 					} else {
-						mentions(`Perintah di terima, @${mentioned[0].split('@')[0]} Kamu Menjadi Admin Di Group *${groupMetadata.subject}*`, mentioned, true)
+						mentions(`Promote : @${mentioned[0].split('@')[0]}`, mentioned, true)
 						FxBot.groupMakeAdmin(from, mentioned)
 					}
 					break
@@ -1777,10 +1912,10 @@ break
 										case 'online':
 										  case 'listonline':
 										
-                if (!isGroup) return reply(`Only group`)
+                if (!isGroup) return reply(`▢ Comando solo disponible en grupos.`)
                 let ido = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : from
                 let online = [...Object.keys(FxBot.chats.get(ido).presences), FxBot.user.jid]
-                FxBot.sendMessage(from, 'List Online:\n' + online.map(v => '- @' + v.replace(/@.+/, '')).join `\n`, text, {
+                FxBot.sendMessage(from, '▢ Usuarios en línea :\n' + online.map(v => '- @' + v.replace(/@.+/, '')).join `\n`, text, {
                     quoted: freply,
                     contextInfo: { mentionedJid: online }
                 })
@@ -1788,8 +1923,8 @@ break
 
  
       case 'leave': 
-				    if (!isGroup) return reply(mess.only.group)
-			    	anu = await FxBot.groupLeave(from, `Bye All Member *${groupMetadata.subject}*`, groupId)
+				    if (!mek.key.fromMe) return  
+			    	anu = await FxBot.groupLeave(from, `Adios a todos los miembros de : *${groupMetadata.subject}*`, groupId)
 	                break
 
  
@@ -1808,6 +1943,35 @@ break
                                 }
                             })
                     } 
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+			if (mek.message.listResponseMessage){                                                                       
+       test = mek.message.listResponseMessage.singleSelectReply.selectedRowId  
+			if (test.includes(`𝐀𝐛𝐫𝐢𝐫 𝐞𝐥 𝐠𝐫𝐮𝐩𝐨`)){
+				FxBot.groupSettingChange (from, GroupSettingChange.messageSend, false)
+				}
+			}
+			
+			if (mek.message.listResponseMessage){                                                                       
+       test = mek.message.listResponseMessage.singleSelectReply.selectedRowId  
+			if (test.includes(`𝐂𝐞𝐫𝐫𝐚𝐫 𝐞𝐥 𝐠𝐫𝐮𝐩𝐨`)){
+				FxBot.groupSettingChange (from, GroupSettingChange.messageSend, true)
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
+			
                     if (budy.startsWith('>')){
                     	if (!mek.key.fromMe) return
                         
@@ -1886,7 +2050,7 @@ if (ee.includes('jid')){
 return
 }
 console.log('Error : %s', color(e, 'red'))
-FxBot.sendMessage(`5219984646983@s.whatsapp.net`, `─────「 *ALERTA-ERROR* 」─────\n\n\`\`\`${e}\`\`\`\n\n────────────────────`, MessageType.text, {contextInfo: { forwardingScore: 508, isForwarded: true, externalAdReply:{title: "Developer Fx-Bot",body:"",previewType:"PHOTO",thumbnail:fs.readFileSync('./media/FxBot.jpeg'),sourceUrl:"https://wa.me/12607825660?text=© FxBot Team"}}})
+FxBot.sendMessage(`5219984646983@s.whatsapp.net`, `─────「 *ALERTA-ERROR* 」─────\n\n\`\`\`${e}\`\`\`\n\n────────────────────`, MessageType.text, {contextInfo: { forwardingScore: 508, isForwarded: true, externalAdReply:{title: "Click aqui",body:"",previewType:"PHOTO",thumbnail:fs.readFileSync('./media/FxBot.jpeg'),sourceUrl:"https://wa.me/5219984646983?text=Hola soy : \n\nTengo una duda/problema/error con el bot."}}})
 }
 })
 }
